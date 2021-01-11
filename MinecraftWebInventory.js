@@ -16,6 +16,7 @@ export default class MinecraftWebInventory {
     this._items = items;
     this._config = config;
     this._tooltip;
+    this._tooltipContent;
   }
 
   /**
@@ -26,7 +27,16 @@ export default class MinecraftWebInventory {
    */
   createTable(elem) {
     elem.appendChild(this._parseItems());
+
+    this._tooltip = document.createElement("div");
+    this._tooltip.classList.add("MinecraftWebInventory__tooltip");
+
+    this._tooltipContent = document.createElement("span");
+    this._tooltipContent.classList.add("MinecraftWebInventory__tooltipContent");
+    this._tooltip.appendChild(this._tooltipContent);
+
     elem.insertAdjacentElement("beforebegin", this._tooltip);
+
     elem.querySelector(".MinecraftWebInventory").style.gridTemplateColumns = `repeat(${elem.dataset.size}, 32px)`;
   }
 
@@ -45,6 +55,7 @@ export default class MinecraftWebInventory {
   _showTooltip(e) {
     this._tooltip.style.visibility = "visible";
     this._tooltip.style.left = `${e.x + 10}px`;
+    this._tooltipContent.textContent = e.target.dataset.name;
   }
 
   _hideTooltip() {
@@ -59,10 +70,11 @@ export default class MinecraftWebInventory {
   _createCell(item) {
     //console.log(item);
     const cell = document.createElement("li");
-
+    cell.dataset.name = item.displayName;
     const image = document.createElement("img");
 
     image.src = `${this._config.path}/${item.itemName}.png`;
+
     image.alt = item.displayName;
 
     if (item.count) {
@@ -80,9 +92,6 @@ export default class MinecraftWebInventory {
     const inventory = document.createElement("ul");
     inventory.classList.add("MinecraftWebInventory");
     this._items.itemsList.map((item) => inventory.appendChild(this._createCell(item)));
-
-    this._tooltip = document.createElement("div");
-    this._tooltip.classList.add("MinecraftWebInventory__tooltip");
 
     return inventory;
   }
