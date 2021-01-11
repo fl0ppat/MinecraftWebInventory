@@ -12,10 +12,10 @@ export default class MinecraftWebInventory {
    * @param {Object} config Items, blocks, etc. in inventory
    * @memberof MinecraftWebInventory
    */
-  constructor(size, items, config) {
-    this._size = size;
+  constructor(items, config) {
     this._items = items;
     this._config = config;
+    this._tooltip;
   }
 
   /**
@@ -26,18 +26,40 @@ export default class MinecraftWebInventory {
    */
   createTable(elem) {
     elem.appendChild(this._parseItems());
+    elem.insertAdjacentElement("beforebegin", this._tooltip);
     elem.querySelector(".MinecraftWebInventory").style.gridTemplateColumns = `repeat(${elem.dataset.size}, 32px)`;
   }
 
   _setEventListners(cell) {
-    cell.addEventListener("mouseover", console.log("MouseOver"));
+    cell.addEventListener("mouseenter", (e) => {
+      this._showTooltip(e);
+    });
+    cell.addEventListener("mouseleave", (e) => {
+      this._hideTooltip(e);
+    });
+    cell.addEventListener("mousemove", (e) => {
+      this._tooltipFollowCursor(e);
+    });
   }
 
-  _showTooltip() {}
+  _showTooltip(e) {
+    this._tooltip.style.visibility = "visible";
+    this._tooltip.style.left = `${e.x + 10}px`;
+  }
+
+  _hideTooltip() {
+    this._tooltip.style.visibility = "hidden";
+  }
+
+  _tooltipFollowCursor(e) {
+    this._tooltip.style.left = `${e.x + 10}px`;
+    this._tooltip.style.top = `${e.y + 10}px`;
+  }
 
   _createCell(item) {
-    console.log(item);
+    //console.log(item);
     const cell = document.createElement("li");
+
     const image = document.createElement("img");
 
     image.src = `${this._config.path}/${item.itemName}.png`;
@@ -50,7 +72,6 @@ export default class MinecraftWebInventory {
     }
 
     cell.append(image);
-
     this._setEventListners(cell);
     return cell;
   }
@@ -59,6 +80,10 @@ export default class MinecraftWebInventory {
     const inventory = document.createElement("ul");
     inventory.classList.add("MinecraftWebInventory");
     this._items.itemsList.map((item) => inventory.appendChild(this._createCell(item)));
+
+    this._tooltip = document.createElement("div");
+    this._tooltip.classList.add("MinecraftWebInventory__tooltip");
+
     return inventory;
   }
 

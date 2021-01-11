@@ -83,5 +83,5 @@ const minecraftItems = {
   ],
 };
 
-const inv = new MinecraftWebInventory([4, 1], minecraftItems, config);
+const inv = new MinecraftWebInventory(minecraftItems, config);
 inv.createTable(document.querySelector(".table"));
