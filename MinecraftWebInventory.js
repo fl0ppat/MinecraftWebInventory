@@ -17,6 +17,8 @@ export default class MinecraftWebInventory {
     this._config = config;
     this._tooltip;
     this._tooltipContent;
+    this._ifShift = false;
+    this._size = 0;
   }
 
   /**
@@ -26,18 +28,33 @@ export default class MinecraftWebInventory {
    * @memberof MinecraftWebInventory
    */
   createTable(elem) {
+    if (elem.dataset.size) {
+      this._size = parseInt(elem.dataset.size);
+    } else {
+      this._size = 9;
+    }
+
     elem.appendChild(this._parseItems());
 
     this._tooltip = document.createElement("div");
     this._tooltip.classList.add("MinecraftWebInventory__tooltip");
 
-    this._tooltipContent = document.createElement("span");
-    this._tooltipContent.classList.add("MinecraftWebInventory__tooltipContent");
+    this._tooltipContent = document.createElement("div");
+    this._tooltipContent.classList.add("MinecraftWebInventory__tooltipWrapper");
     this._tooltip.appendChild(this._tooltipContent);
 
     elem.insertAdjacentElement("beforebegin", this._tooltip);
+    document.addEventListener("keydown", (e) => {
+      if (this._ifShift) {
+        return;
+      }
+      this._showShiftData(e);
+    });
+    document.addEventListener("keyup", (e) => {
+      this._hideShiftData(e);
+    });
 
-    elem.querySelector(".MinecraftWebInventory").style.gridTemplateColumns = `repeat(${elem.dataset.size}, 32px)`;
+    elem.querySelector(".MinecraftWebInventory").style.gridTemplateColumns = `repeat(${this._size}, 32px)`;
   }
 
   _setEventListners(cell) {
@@ -52,14 +69,62 @@ export default class MinecraftWebInventory {
     });
   }
 
+  _prepareDataForTooltip(e) {
+    const item = this._items.itemsList[e.target.dataset.id];
+    this._addLineToTooltp(item.displayName);
+    if (item.description) {
+      item.description.forEach((line) => {
+        this._addLineToTooltp(line);
+      });
+    }
+
+    if (item.shift) {
+      item.shift.forEach((line) => {
+        this._addLineToTooltp(line, "shift");
+      });
+      this._addLineToTooltp("Зажмите SHIFT для большей информации.", "reverse");
+    }
+    if (item.mod) {
+      this._addLineToTooltp(item.mod);
+    } else {
+      this._addLineToTooltp("&9Minecraft");
+    }
+  }
+
+  _addLineToTooltp(line, shift) {
+    const elem = document.createElement("p");
+    elem.textContent = line.slice(2);
+    if (shift === "shift") {
+      elem.classList.add(`MinecraftWebInventory__tooltipContent_shift`);
+    } else if (shift === "reverse") {
+      elem.classList.add(`MinecraftWebInventory__tooltipContent_reverse-shift`);
+    } else {
+      elem.classList.add(`MinecraftWebInventory__tooltipContent`);
+    }
+    if (line[0] === "&") {
+      elem.classList.add("tooltip_color_" + line[1]);
+      elem.textContent = line.slice(2);
+    } else {
+      elem.classList.add("tooltip_color_" + 7);
+      elem.textContent = line;
+    }
+
+    this._tooltipContent.append(elem);
+  }
+
   _showTooltip(e) {
+    this._prepareDataForTooltip(e);
     this._tooltip.style.visibility = "visible";
     this._tooltip.style.left = `${e.x + 10}px`;
-    this._tooltipContent.textContent = e.target.dataset.name;
+
+    if (e.target.dataset.enchants) this._tooltipContent.textContent += e.target.dataset.enchants;
   }
 
   _hideTooltip() {
     this._tooltip.style.visibility = "hidden";
+    while (this._tooltipContent.firstChild) {
+      this._tooltipContent.removeChild(this._tooltipContent.firstChild);
+    }
   }
 
   _tooltipFollowCursor(e) {
@@ -67,14 +132,42 @@ export default class MinecraftWebInventory {
     this._tooltip.style.top = `${e.y + 10}px`;
   }
 
-  _createCell(item) {
-    //console.log(item);
+  _showShiftData(e) {
+    if (e.key === "Shift") {
+      this._ifShift = true;
+      const shift = this._tooltipContent.querySelectorAll(".MinecraftWebInventory__tooltipContent_shift");
+      if (shift.length > 0) {
+        shift.forEach((elem) => {
+          elem.style.display = "block";
+        });
+      }
+      const reverse = this._tooltipContent.querySelector(".MinecraftWebInventory__tooltipContent_reverse-shift");
+      if (reverse) reverse.style.display = "none";
+    }
+  }
+
+  _hideShiftData(e) {
+    if (e.key === "Shift") {
+      this._ifShift = false;
+      const shift = this._tooltipContent.querySelectorAll(".MinecraftWebInventory__tooltipContent_shift");
+      if (shift.length > 0) {
+        shift.forEach((elem) => {
+          elem.style.display = "none";
+        });
+      }
+      const reverse = this._tooltipContent.querySelector(".MinecraftWebInventory__tooltipContent_reverse-shift");
+      if (reverse) reverse.style.display = "block";
+    }
+  }
+
+  _createCell(item, index, empty) {
     const cell = document.createElement("li");
-    cell.dataset.name = item.displayName;
+    if (empty) {
+      return cell;
+    }
     const image = document.createElement("img");
-
+    cell.dataset.id = index;
     image.src = `${this._config.path}/${item.itemName}.png`;
-
     image.alt = item.displayName;
 
     if (item.count) {
@@ -91,7 +184,18 @@ export default class MinecraftWebInventory {
   _parseItems() {
     const inventory = document.createElement("ul");
     inventory.classList.add("MinecraftWebInventory");
-    this._items.itemsList.map((item) => inventory.appendChild(this._createCell(item)));
+    this._items.itemsList.map((item, index) => inventory.appendChild(this._createCell(item, index)));
+
+    const listLength = this._items.itemsList.length;
+    const rows = Math.ceil(listLength / this._size);
+    const needToAddCells = rows * this._size - listLength;
+
+    if (needToAddCells > 0) {
+      console.log("here");
+      for (let index = 0; index < needToAddCells; index++) {
+        inventory.appendChild(this._createCell(0, 0, true));
+      }
+    }
 
     return inventory;
   }

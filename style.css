@@ -1,3 +1,12 @@
+/**
+Minecraft Wiki style
+*/
+
+@font-face {
+  font-family: Minecraft-ru;
+  src: url(./Minecraft-ru.ttf);
+}
+
 .MinecraftWebInventory{
   display: grid;
   list-style: none;
@@ -5,6 +14,7 @@
   padding: 0;
   column-gap: 4px;
   cursor: pointer;
+  max-width: fit-content;
 }
 
 .MinecraftWebInventory li {
@@ -16,6 +26,7 @@
   background-size: 32px;
   border: 2px solid;
   border-color: #373737 #FFF #FFF #373737;
+  font-family: Minecraft-ru,sans-serif;
 }
 
 .MinecraftWebInventory li img {
@@ -46,12 +57,12 @@
   font-family: Minecraft-ru,sans-serif;
   font-size: 16px;
   word-spacing: 4px;
-  white-space: nowrap;
   line-height: 1em;
   text-shadow: 0.125em 0.125em 0 #3F3F3F;
   margin: 0.125em 0.25em;
   pointer-events: none;
   z-index: 9999;
+  white-space: pre;
 }
 
 .MinecraftWebInventory__tooltip::before {
@@ -63,7 +74,8 @@
   left: -0.125em;
   border: 0.125em solid #100010;
   border-style: none solid;
-  border-color: rgba(16,0,16,0.94);}
+  border-color: rgba(16,0,16,0.94);
+}
 
 .MinecraftWebInventory__tooltip::after {
   content: "";
@@ -77,3 +89,36 @@
   border-image: linear-gradient(rgba(80,0,255,0.31),rgba(40,0,127,0.31)) 1;
 
 }
+
+.MinecraftWebInventory__tooltipContent {
+  margin: 3px 0;
+}
+
+.MinecraftWebInventory__tooltipContent_shift {
+  margin: 3px 0;
+  white-space: pre;
+  display: none;
+}
+
+.MinecraftWebInventory__tooltipContent_reverse-shift {
+  margin: 3px 0;
+  white-space: pre;
+  display: block;
+}
+
+.tooltip_color_0 {color: #000000;}
+.tooltip_color_1 {color: #0000AA;}
+.tooltip_color_2 {color: #00AA00;}
+.tooltip_color_3 {color: #00AAAA;}
+.tooltip_color_4 {color: #AA0000;}
+.tooltip_color_5 {color: #AA00AA;}
+.tooltip_color_6 {color: #FFAA00;}
+.tooltip_color_7 {color: #AAAAAA;}
+.tooltip_color_8 {color: #555555;}
+.tooltip_color_9 {color: #5555FF;}
+.tooltip_color_a {color: #55FF55;}
+.tooltip_color_b {color: #55FFFF;}
+.tooltip_color_c {color: #FF5555;}
+.tooltip_color_d {color: #FF55FF;}
+.tooltip_color_e {color: #FFFF55;}
+.tooltip_color_f {color: #FFFFFF;}
