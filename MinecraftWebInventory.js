@@ -163,6 +163,7 @@ export default class MinecraftWebInventory {
   _createCell(item, index, empty) {
     const cell = document.createElement("li");
     if (empty) {
+      cell.classList.add("MinecraftWebInventory_empty");
       return cell;
     }
     const image = document.createElement("img");
@@ -186,22 +187,38 @@ export default class MinecraftWebInventory {
     inventory.classList.add("MinecraftWebInventory");
     this._items.itemsList.map((item, index) => inventory.appendChild(this._createCell(item, index)));
 
-    const listLength = this._items.itemsList.length;
-    const rows = Math.ceil(listLength / this._size);
-    const needToAddCells = rows * this._size - listLength;
-
-    if (needToAddCells > 0) {
-      console.log("here");
-      for (let index = 0; index < needToAddCells; index++) {
-        inventory.appendChild(this._createCell(0, 0, true));
-      }
-    }
+    this._addEmptyCells(inventory);
 
     return inventory;
   }
 
-  changeSize(elem, cells) {
-    elem.querySelector(".MinecraftWebInventory").style.gridTemplateColumns = `repeat(${cells}, 32px)`;
+  _addEmptyCells(elem) {
+    const listLength = this._items.itemsList.length;
+    const rows = Math.ceil(listLength / this._size);
+    const needToAddCells = rows * this._size - listLength;
+
+    console.log(elem);
+
+    if (needToAddCells > 0) {
+      for (let index = 0; index < needToAddCells; index++) {
+        elem.appendChild(this._createCell(0, 0, true));
+      }
+    }
+  }
+
+  _clearEmptyCells(elem) {
+    const arrOfEmptyCells = elem.querySelectorAll(".MinecraftWebInventory_empty");
+    arrOfEmptyCells.forEach((cell) => {
+      cell.remove();
+    });
+  }
+
+  changeSize(elem, size) {
+    console.log(elem);
+    this._size = size;
+    this._clearEmptyCells(elem);
+    this._addEmptyCells(elem);
+    elem.style.gridTemplateColumns = `repeat(${size}, 32px)`;
   }
 
   debugLog() {
