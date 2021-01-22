@@ -162,9 +162,18 @@ export default class MinecraftWebInventory {
 
   _createCell(item, index, empty) {
     const cell = document.createElement("li");
+
     if (empty) {
       cell.classList.add("MinecraftWebInventory_empty");
       return cell;
+    }
+
+    if (item.glow) {
+      const glow = document.createElement("div");
+      glow.classList.add("MinecraftWebInventory__glow");
+      glow.style.maskImage = `url(${this._config.path}/${item.itemName}.png)`;
+      glow.style.webkitMaskBoxImage = `url(${this._config.path}/${item.itemName}.png)`;
+      cell.append(glow);
     }
     const image = document.createElement("img");
     cell.dataset.id = index;
@@ -196,8 +205,6 @@ export default class MinecraftWebInventory {
     const listLength = this._items.itemsList.length;
     const rows = Math.ceil(listLength / this._size);
     const needToAddCells = rows * this._size - listLength;
-
-    console.log(elem);
 
     if (needToAddCells > 0) {
       for (let index = 0; index < needToAddCells; index++) {

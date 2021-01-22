@@ -1,4 +1,4 @@
-/**
+/*
 Minecraft Wiki style
 */
 
@@ -42,8 +42,19 @@ Minecraft Wiki style
   position: absolute;
   bottom: 0;
   right: 0;
-  z-index: 2;
+  z-index: 100;
 }
+
+.MinecraftWebInventory__glow {
+  width: 32px;
+  height: 32px;
+  position: absolute;
+  z-index: 99;
+  opacity: .4;
+  mask-size: contain;
+  -webkit-mask-size: contain;
+  background-image: url('./glow.webp');
+} 
 
 .MinecraftWebInventory__tooltip {
   visibility: hidden;
