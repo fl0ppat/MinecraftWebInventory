@@ -116,8 +116,6 @@ export default class MinecraftWebInventory {
     this._prepareDataForTooltip(e);
     this._tooltip.style.visibility = "visible";
     this._tooltip.style.left = `${e.x + 10}px`;
-
-    if (e.target.dataset.enchants) this._tooltipContent.textContent += e.target.dataset.enchants;
   }
 
   _hideTooltip() {
@@ -128,8 +126,8 @@ export default class MinecraftWebInventory {
   }
 
   _tooltipFollowCursor(e) {
-    this._tooltip.style.left = `${e.x + 10}px`;
-    this._tooltip.style.top = `${e.y + 10}px`;
+    this._tooltip.style.left = `${e.pageX + 10}px`;
+    this._tooltip.style.top = `${e.pageY + 10}px`;
   }
 
   _showShiftData(e) {
