@@ -12,6 +12,8 @@ const minecraftItems_2 = {
     {
       itemName: "Cobblestone",
       count: 32,
+      glow: true,
+      shift: ["Hello", "it's", "enchant"],
       displayName: "&fБулыжник",
     },
     {

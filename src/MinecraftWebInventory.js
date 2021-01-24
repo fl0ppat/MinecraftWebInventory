@@ -4,6 +4,9 @@
  * @export
  * @class MinecraftWebInventory
  */
+
+//Todo change size to RowLength
+// TODO change itemname to textureName
 export default class MinecraftWebInventory {
   /**
    * Creates an instance of MinecraftWebInventory.
@@ -44,12 +47,14 @@ export default class MinecraftWebInventory {
     this._tooltip.appendChild(this._tooltipContent);
 
     elem.insertAdjacentElement("beforebegin", this._tooltip);
+
     document.addEventListener("keydown", (e) => {
       if (this._ifShift) {
         return;
       }
       this._showShiftData(e);
     });
+
     document.addEventListener("keyup", (e) => {
       this._hideShiftData(e);
     });
@@ -169,8 +174,8 @@ export default class MinecraftWebInventory {
     if (item.glow) {
       const glow = document.createElement("div");
       glow.classList.add("MinecraftWebInventory__glow");
-      glow.style.maskImage = `url(${this._config.path}/${item.itemName}.png)`;
-      glow.style.webkitMaskBoxImage = `url(${this._config.path}/${item.itemName}.png)`;
+      glow.style.maskImage = `url(./${this._config.path}/${item.itemName}.png)`;
+      glow.style.webkitMaskBoxImage = `url(./${this._config.path}/${item.itemName}.png)`;
       cell.append(glow);
     }
     const image = document.createElement("img");
@@ -199,6 +204,13 @@ export default class MinecraftWebInventory {
     return inventory;
   }
 
+  changeSize(elem, size) {
+    this._size = size;
+    this._clearEmptyCells(elem);
+    this._addEmptyCells(elem);
+    elem.style.gridTemplateColumns = `repeat(${size}, 32px)`;
+  }
+
   _addEmptyCells(elem) {
     const listLength = this._items.itemsList.length;
     const rows = Math.ceil(listLength / this._size);
@@ -216,13 +228,6 @@ export default class MinecraftWebInventory {
     arrOfEmptyCells.forEach((cell) => {
       cell.remove();
     });
-  }
-
-  changeSize(elem, size) {
-    this._size = size;
-    this._clearEmptyCells(elem);
-    this._addEmptyCells(elem);
-    elem.style.gridTemplateColumns = `repeat(${size}, 32px)`;
   }
 
   debugLog() {
