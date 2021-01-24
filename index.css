@@ -10,13 +10,44 @@
   background-color: antiquewhite;
 }
 
-.header{
+.header {
   margin: 0 auto;
   max-width: 800px;
   width: 100%;}
 
-.main{
+.main {
   margin: 0 auto;
   max-width: 800px;
+  min-width: 400px;
+  width: 100%;
+}
+
+.case {
+  margin: 0 auto;
+  width: 100%;
+}
+
+.case p {
+  font-size: 14px;
+  margin: .1em
+}
+
+.case pre {
+  margin: 0;
+}
+
+.case-1__code {
+  max-height: 250px;
+  height: 100%;
+  overflow: auto;
+  max-width: 400px;
+}
+
+.case-2 {
+  margin-left: 1em;
+}
+
+.case-2__input {
+  max-width: 320px;
   width: 100%;
 }
