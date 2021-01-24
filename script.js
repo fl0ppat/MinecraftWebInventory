@@ -1,4 +1,4 @@
-import MinecraftWebInventory from "../src/MinecraftWebInventory.js";
+import MinecraftWebInventory from "./src/MinecraftWebInventory.js";
 import { minecraftItems_1, minecraftItems_2, minecraftItems_3 } from "./minecraftItems.js";
 
 const config = {
