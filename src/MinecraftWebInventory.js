@@ -219,7 +219,6 @@ export default class MinecraftWebInventory {
   }
 
   changeSize(elem, size) {
-    console.log(elem);
     this._size = size;
     this._clearEmptyCells(elem);
     this._addEmptyCells(elem);
