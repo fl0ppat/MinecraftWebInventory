@@ -50,8 +50,8 @@ Minecraft Wiki style
   height: 32px;
   position: absolute;
   z-index: 99;
-  opacity: .4;
   mask-size: contain;
+  mix-blend-mode: color-dodge;
   -webkit-mask-size: contain;
   background-image: url('./glow.webp');
 } 
