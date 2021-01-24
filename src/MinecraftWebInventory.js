@@ -175,7 +175,7 @@ export default class MinecraftWebInventory {
     }
     const image = document.createElement("img");
     cell.dataset.id = index;
-    image.src = `${this._config.path}/${item.itemName}.png`;
+    image.src = `.${this._config.path}/${item.itemName}.png`;
     image.alt = item.displayName;
 
     if (item.count) {
