@@ -1,2 +1,4 @@
 # MinecraftWebInventory
-Визуальное отображение предметов инвентаря как в игре Minecraft.
+Minecraft-like inventory.
+
+[Demo](https://fl0ppat.github.io/MinecraftWebInventory/)
