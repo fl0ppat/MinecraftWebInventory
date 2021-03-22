@@ -1,11 +1,21 @@
-# MinecraftWebInventory
+# Minecraft Web Inventory
 
-<h3>WIP</h3>
-Minecraft-like inventory.
+Mincraft-like inventory for item rendering. Tooltips support custom lines.
 
-[Demo](https://fl0ppat.github.io/MWI/)
+## Installation
 
-TODO:
+Check [Demo](https://fl0ppat.github.io/MWI/)
+
+## Technologies
+
+- ES6
+- CSS modules
+
+## TODO
 
 - Add new styles
 - Add different builds
+
+## Support
+
+Please [open an issue](https://github.com/fl0ppat/MWI/issues/new) for new features.
